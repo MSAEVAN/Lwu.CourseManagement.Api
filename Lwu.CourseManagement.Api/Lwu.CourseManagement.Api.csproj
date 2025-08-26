@@ -7,8 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="13.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lwu.CourseManagement.Application\Lwu.CourseManagement.Application.csproj" />
+    <ProjectReference Include="..\Lwu.CourseManagement.Domain\Lwu.CourseManagement.Domain.csproj" />
+    <ProjectReference Include="..\Lwu.CourseManagement.Infrastructure\Lwu.CourseManagement.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

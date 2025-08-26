@@ -1,6 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Lwu.CourseManagement.Application;
+using Lwu.CourseManagement.Application.Common.Interfaces;
+using Lwu.CourseManagement.Infrastructure.DAL;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Lwu.CourseManagement.Api.Controllers
 {
@@ -9,15 +19,40 @@ namespace Lwu.CourseManagement.Api.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _config;
-        public AuthController(IConfiguration config)
+        private readonly IPasswordHasher _hasher;
+        ApplicationDbContext DbContext;
+        
+        public AuthController(IConfiguration config, ApplicationDbContext db, IPasswordHasher hasher)
         {
             _config = config;
+            DbContext = db;
+            _hasher = hasher;
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request, CancellationToken ct)
+        [ProducesResponseType(typeof(LoginResponse), 200)]
+        public async Task<IActionResult> Login([FromBody] Application.LoginRequest request, CancellationToken ct)
         {
+            var user = await DbContext.Users.FirstOrDefaultAsync(u => u.Username == request.Username, ct);
+            if (user is null || !_hasher.Verify(request.Password, user.PasswordHash))
+                return Unauthorized();
 
+            var jwt = _config.GetSection("Jwt");
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt["Key"]!));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var token = new JwtSecurityToken(
+                issuer: jwt["Issuer"],
+                audience: jwt["Audience"],
+                claims: new[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Name, user.Username),
+                    new Claim(ClaimTypes.Role, user.Role)
+                },
+                expires: DateTime.UtcNow.AddMinutes(int.Parse(jwt["ExpiresMinutes"]!)),
+                signingCredentials: creds);
+
+            return Ok(new LoginResponse(new JwtSecurityTokenHandler().WriteToken(token)));
         }
     }
 }
