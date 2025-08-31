@@ -1,5 +1,6 @@
 ﻿using Lwu.CourseManagement.Application;
 using Lwu.CourseManagement.Application.Common.Interfaces;
+using Lwu.CourseManagement.Application.Common.Interfaces.IRepositories;
 using Lwu.CourseManagement.Infrastructure.DAL;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.Data;
@@ -20,12 +21,12 @@ namespace Lwu.CourseManagement.Api.Controllers
     {
         private readonly IConfiguration _config;
         private readonly IPasswordHasher _hasher;
-        ApplicationDbContext DbContext;
-        
-        public AuthController(IConfiguration config, ApplicationDbContext db, IPasswordHasher hasher)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public AuthController(IConfiguration config, IUnitOfWork unitOfWork, IPasswordHasher hasher)
         {
             _config = config;
-            DbContext = db;
+            _unitOfWork = unitOfWork;
             _hasher = hasher;
         }
 
@@ -33,7 +34,7 @@ namespace Lwu.CourseManagement.Api.Controllers
         [ProducesResponseType(typeof(LoginResponse), 200)]
         public async Task<IActionResult> Login([FromBody] Application.LoginRequest request, CancellationToken ct)
         {
-            var user = await DbContext.Users.FirstOrDefaultAsync(u => u.Username == request.Username, ct);
+            var user = await _unitOfWork.UserRepository.Filter(u => u.Username == request.Username).FirstOrDefaultAsync();
             if (user is null || !_hasher.Verify(request.Password, user.PasswordHash))
                 return Unauthorized();
 

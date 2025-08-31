@@ -8,4 +8,6 @@ namespace Lwu.CourseManagement.Application
 {
     public record LoginRequest(string Username, string Password);
     public record LoginResponse(string Token);
+
+    public record CreateUserResponse(Guid Id, string FullName, string UserName, string Email, string UserPrincipal, string Role, string PasswordHash);
 }

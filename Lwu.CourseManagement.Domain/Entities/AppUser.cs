@@ -9,17 +9,13 @@ namespace Lwu.CourseManagement.Application.Entities
 {
     public class AppUser : BaseEntity
     {
-        [Required, MaxLength(64)]
+        public string FullName { get; set; } = default!;
         public string Username { get; set; } = default!;
 
         public string Email { get; set; } = string.Empty;
 
         public string UserPrincipal { get; set; } = default!;
-
-        [Required]
         public string PasswordHash { get; set; } = default!;
-
-        [Required, MaxLength(32)]
         public string Role { get; set; } = "Staff"; // "Staff" | "Student"
 
         public Guid? StudentId { get; set; }
