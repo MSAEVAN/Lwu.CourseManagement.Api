@@ -26,4 +26,7 @@ namespace Lwu.CourseManagement.Application
 
     public record CreateStudentRequest(string FullName, string Email, string Username, string Password);
     public record UpdateStudentRequest(string FullName);
+
+    public record EnrollClassRequest(Guid StudentId, Guid ClassId);
+    public record EnrollCourseRequest(Guid StudentId, Guid CourseId);
 }
