@@ -1,6 +1,4 @@
 # Lwu.CourseManagement.Api
-
-Lwu.CourseManagement
 ====================
 
 A modular ASP.NET Core project for managing course-related data, structured using Clean Architecture principles and powered by Entity Framework Core for database operations.
