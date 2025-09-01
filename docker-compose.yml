@@ -1,0 +1,42 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: lwuDB
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks: [internal]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 10
+  # seq:
+  #   image: datalust/seq:2024.3
+  #   environment:
+  #     - ACCEPT_EULA=Y
+  #   ports:
+  #     - "5341:5341"
+  #     - "8081:80"
+  #   networks: [internal]
+  api:
+    build:
+      # context: .
+      # dockerfile: Lwu.CourseManagement.Api/Lwu.CourseManagement.Api/Dockerfile
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      postgres:
+        condition: service_healthy
+      # seq:
+      #   condition: service_started
+    ports:
+      - "8080:8080"
+    networks: [internal]
+volumes:
+  pgdata:
+networks:
+  internal:
+    driver: bridge

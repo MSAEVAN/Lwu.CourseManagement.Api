@@ -1,0 +1,25 @@
+# Build output
+**/bin/
+**/obj/
+
+# User-specific files
+*.user
+*.suo
+
+# IDE folders
+.vscode/
+.idea/
+
+# Git & CI
+.git/
+.gitignore
+*.log
+
+# OS/Editor junk
+.DS_Store
+Thumbs.db
+
+# Don't ignore .csproj or your source folders!
+# DO NOT DO THIS:
+# Lwu.CourseManagement.*
+# *.csproj
