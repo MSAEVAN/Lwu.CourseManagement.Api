@@ -13,33 +13,35 @@ namespace Lwu.CourseManagement.Api.Controllers
     public class ClassesController : BaseApiController
     {
         [HttpGet]
+        [Authorize(Policy = "StaffOnly")]
         public async Task<ActionResult<IReadOnlyList<ClassDto>>> GetAll(CancellationToken ct)
         {
             return Ok(await Mediator.Send(new ClassQueries.GetAll(), ct));
         }
 
         [HttpGet("by-course/{courseId:guid}")]
+        [Authorize(Policy = "StaffOnly")]
         public async Task<ActionResult<IReadOnlyList<ClassDto>>> GetByCourse(Guid courseId, CancellationToken ct)
         {
             return Ok(await Mediator.Send(new ClassQueries.GetByCourse(courseId), ct));
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Staff")]
+        [Authorize(Policy = "StaffOnly")]
         public async Task<ActionResult<ClassDto>> Create([FromBody] CreateClassRequest request, CancellationToken ct)
         {
             return Ok(await Mediator.Send(new ClassCommands.Create(request), ct));
         }
 
         [HttpPut("{id:guid}")]
-        //[Authorize(Roles = "Staff")]
+        [Authorize(Policy = "StaffOnly")]
         public async Task<ActionResult<ClassDto>> Update(Guid id, [FromBody] UpdateClassRequest request, CancellationToken ct)
         {
             return Ok(await Mediator.Send(new ClassCommands.Update(id, request), ct));
         }
 
         [HttpDelete("{id:guid}")]
-        //[Authorize(Roles = "Staff")]
+        [Authorize(Policy = "StaffOnly")]
         public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
         {
             await Mediator.Send(new ClassCommands.Delete(id), ct);

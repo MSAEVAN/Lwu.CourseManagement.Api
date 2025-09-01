@@ -73,7 +73,7 @@ namespace Lwu.CourseManagement.Infrastructure.DapperServices
                 userRes.FullName = getUser.FullName;
                 userRes.Email = getUser.Email;
                 userRes.Username = getUser.Username;
-                userRes.IsReadOnly = getUser.Role.ToLower() == "stuff" ? false : true;
+                userRes.IsReadOnly = getUser.Role.ToLower() == "staff" ? false : true;
                 userRes.Id = getUser.Id;
                 userRes.IsAdmin = getUser.UserPrincipal.ToLower() == "admin" ? true : false;
             }

@@ -78,11 +78,15 @@ builder.Services
         //};
     });
 
+builder.Services.AddAuthorization(options => {
+    options.AddPolicy("StaffOnly", p => p.RequireRole("Staff"));
+    options.AddPolicy("StudentOrStaff", p => p.RequireRole("Student", "Staff"));
+});
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDomain();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
-builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(option =>

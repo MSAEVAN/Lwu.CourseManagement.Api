@@ -55,7 +55,7 @@ namespace Lwu.CourseManagement.Infrastructure.DAL
                    Email = "admin@mail.com",
                    UserPrincipal = "admin",
                    FullName = "MSA Evan",
-                   Role = "Stuff",
+                   Role = "Staff",
                    PasswordHash = "$2a$11$9.MV93UKWiuZtTmqzHmb2.ENRvyEHTB726NQgquEC77X4FGWTVuIq", // admin123
                    CreatedByUserId = Guid.Parse("EAA6081C-16F1-41BE-9153-5662BC03E9FC"),
                    CreatedOn = new DateTime(2025, 08, 31, 0, 0, 0, DateTimeKind.Utc),

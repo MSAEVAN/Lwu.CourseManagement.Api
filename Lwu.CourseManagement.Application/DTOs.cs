@@ -11,9 +11,10 @@ namespace Lwu.CourseManagement.Application
 
     public record CreateUserResponse(Guid Id, string FullName, string UserName, string Email, string UserPrincipal, string Role, string PasswordHash);
 
-
     //
     public record StudentDto(Guid Id, string FullName);
+    public record StudentClassCoursesDto(string Class, string Course);
+    public record StudentClassDto(string Student, string Class, string Assignee, DateTime AssignedAt);
     public record CourseDto(Guid Id, string Name, string? Description);
     public record ClassDto(Guid Id, string Name, string? Room);
     public record UserDto(Guid Id, string Username, string Role);

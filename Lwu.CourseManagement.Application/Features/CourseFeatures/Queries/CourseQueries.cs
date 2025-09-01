@@ -12,11 +12,23 @@ namespace Lwu.CourseManagement.Application.Features.CourseFeatures.Queries
     public static class CourseQueries
     {
         public record GetAll : IRequest<IReadOnlyList<CourseDto>>;
-        public class Handler(IUnitOfWork uow) : IRequestHandler<GetAll, IReadOnlyList<CourseDto>>
+        public record GetCourseByClass(Guid classId) : IRequest<IReadOnlyList<CourseDto>>;
+        public class GetAllHandler(IUnitOfWork uow) : IRequestHandler<GetAll, IReadOnlyList<CourseDto>>
         {
             public async Task<IReadOnlyList<CourseDto>> Handle(GetAll request, CancellationToken ct)
             {
                 return await uow.CourseRepository.Filter(x=> !x.IsDeleted)
+                    .Select(c => new CourseDto(c.Id, c.Name, c.Description))
+                    .ToListAsync(ct);
+            }
+        }
+
+        public class GetCourseByClassHandler(IUnitOfWork uow) : IRequestHandler<GetCourseByClass, IReadOnlyList<CourseDto>>
+        {
+            public async Task<IReadOnlyList<CourseDto>> Handle(GetCourseByClass request, CancellationToken ct)
+            {
+                return await uow.CourseRepository.Filter(x => !x.IsDeleted)
+                    .Where(c => c.Id == request.classId)
                     .Select(c => new CourseDto(c.Id, c.Name, c.Description))
                     .ToListAsync(ct);
             }
