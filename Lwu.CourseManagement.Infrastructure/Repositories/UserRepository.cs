@@ -1,5 +1,5 @@
 ﻿using Lwu.CourseManagement.Application.Common.Interfaces.IRepositories;
-using Lwu.CourseManagement.Application.Entities;
+using Lwu.CourseManagement.Domain.Entities;
 using Lwu.CourseManagement.Infrastructure.DAL;
 using System;
 using System.Collections.Generic;

@@ -1,8 +1,8 @@
 ﻿using Lwu.CourseManagement.Application.Common.Interfaces;
-using Lwu.CourseManagement.Domain;
+using Lwu.CourseManagement.Application.Common.Interfaces.IDapper;
 using Lwu.CourseManagement.Infrastructure.DAL;
+using Lwu.CourseManagement.Infrastructure.DapperServices;
 using Lwu.CourseManagement.Infrastructure.Repositories;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -19,6 +19,7 @@ namespace Lwu.CourseManagement.Infrastructure
             services.AddScoped<ApplicationDbContext, ApplicationDbContext>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddTransient(typeof(IAuthService), typeof(AuthService));
+            services.AddTransient(typeof(IStudentIdGenerator), typeof(StudentIdGenerator));
 
             return services;
         }

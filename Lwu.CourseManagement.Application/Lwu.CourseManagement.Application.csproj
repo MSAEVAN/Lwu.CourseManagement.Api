@@ -22,8 +22,4 @@
     <ProjectReference Include="..\Lwu.CourseManagement.Domain\Lwu.CourseManagement.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\UserFeatures\Dto\" />
-  </ItemGroup>
-
 </Project>

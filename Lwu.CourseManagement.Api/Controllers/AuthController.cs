@@ -1,9 +1,5 @@
 ﻿using Lwu.CourseManagement.Application;
 using Lwu.CourseManagement.Application.Common.Interfaces;
-using Lwu.CourseManagement.Application.Common.Interfaces.IRepositories;
-using Lwu.CourseManagement.Infrastructure.DAL;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -48,6 +44,7 @@ namespace Lwu.CourseManagement.Api.Controllers
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Name, user.Username),
+                    new Claim(ClaimTypes.Email, user.Email),
                     new Claim(ClaimTypes.Role, user.Role)
                 },
                 expires: DateTime.UtcNow.AddMinutes(int.Parse(jwt["ExpiresMinutes"]!)),

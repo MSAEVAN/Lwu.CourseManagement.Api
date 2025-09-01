@@ -1,4 +1,4 @@
-﻿using Lwu.CourseManagement.Application.Entities;
+﻿using Lwu.CourseManagement.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

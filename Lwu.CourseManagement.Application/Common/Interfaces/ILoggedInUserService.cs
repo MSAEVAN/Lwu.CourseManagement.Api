@@ -1,4 +1,4 @@
-﻿using Lwu.CourseManagement.Application.Entities;
+﻿using Lwu.CourseManagement.Application.Features.UserFeatures.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ namespace Lwu.CourseManagement.Application.Common.Interfaces
     {
         Guid Id { get; }
         string Email { get; }
-        AppUser User { get; }
+        AppUserDto User { get; }
         void LoadLoggedinuser(string email);
         public List<Claim> GetCustomClaims();
     }

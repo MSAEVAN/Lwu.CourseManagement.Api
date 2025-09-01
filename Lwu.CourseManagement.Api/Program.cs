@@ -14,11 +14,23 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text;
 using static Lwu.CourseManagement.Application.Features.UserFeatures.Command.CreateUserCommand;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(ctx.Configuration));
+
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AppCORSPolicy", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 builder.Services.AddDbContext<ApplicationDbContext>(opt =>
 {
@@ -50,6 +62,20 @@ builder.Services
             ValidAudience = jwtSection["Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(key)
         };
+
+        // Hook into token validation if you want to add extra claims
+        //options.Events = new JwtBearerEvents
+        //{
+        //    OnTokenValidated = ctxt =>
+        //    {
+        //        var claimsIdentity = ctxt.Principal.Identity as ClaimsIdentity;
+
+        //        // Example: add custom claim
+        //        claimsIdentity?.AddClaim(new Claim("CustomClaim", "MyValue"));
+
+        //        return Task.CompletedTask;
+        //    }
+        //};
     });
 
 builder.Services.AddHttpContextAccessor();
@@ -87,10 +113,11 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-
+app.UseCors("AppCORSPolicy");
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

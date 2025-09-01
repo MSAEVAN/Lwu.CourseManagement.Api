@@ -1,5 +1,5 @@
 ﻿using Lwu.CourseManagement.Application.Common.Interfaces;
-using Lwu.CourseManagement.Application.Entities;
+using Lwu.CourseManagement.Application.Features.UserFeatures.Dto;
 using Lwu.CourseManagement.Application.Features.UserFeatures.Queries;
 using MediatR;
 using System.Security.Claims;
@@ -15,7 +15,7 @@ namespace Lwu.CourseManagement.Api.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        private AppUser _User { get; set; }
+        private AppUserDto _User { get; set; }
         public Guid Id
         {
             get
@@ -30,7 +30,7 @@ namespace Lwu.CourseManagement.Api.Services
 
         public string Email { get { return User.Email; } }
 
-        public AppUser User
+        public AppUserDto User
         {
             get
             {
@@ -70,14 +70,12 @@ namespace Lwu.CourseManagement.Api.Services
 
         public List<Claim> GetCustomClaims()
         {
-            var roles = new string[] { "Stuff", "Student" };
-
             var claims = new List<Claim>();
-            if (_User.Role == "Admin")
+            if (_User.IsAdmin)
             {
                 claims.Add(new Claim(ClaimTypes.Role, "Admin"));
             }
-            if (roles.Contains(_User.Role))
+            if (!_User.IsReadOnly)
             {
                 claims.Add(new Claim(ClaimTypes.Role, "Editor"));
             }

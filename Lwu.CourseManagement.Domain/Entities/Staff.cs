@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lwu.CourseManagement.Application.Entities
+namespace Lwu.CourseManagement.Domain.Entities
 {
     public class Staff : BaseEntity
     {

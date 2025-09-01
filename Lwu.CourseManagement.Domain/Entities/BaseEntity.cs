@@ -6,11 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lwu.CourseManagement.Application.Entities
+namespace Lwu.CourseManagement.Domain.Entities
 {
-    public abstract class BaseEntity
+    public class BaseEntity
     {
-        [Key]
         public Guid Id { get; set; } = Guid.NewGuid();
         public bool IsDeleted { get; set; } = false;
         public DateTime CreatedOn { get; set; } = DateTime.Now;

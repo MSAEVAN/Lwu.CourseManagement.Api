@@ -1,6 +1,6 @@
 ﻿using Lwu.CourseManagement.Application.Common.Interfaces;
 using Lwu.CourseManagement.Application.Common.Responses;
-using Lwu.CourseManagement.Application.Entities;
+using Lwu.CourseManagement.Domain.Entities;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -22,7 +22,6 @@ namespace Lwu.CourseManagement.Application.Features.UserFeatures.Command
             public CreateUserCommandHandler(IUnitOfWork unitOfWork)
             {
                 _unitOfWork = unitOfWork;
-
             }
 
             public async Task<CustomResponse<bool>> Handle(Create command, CancellationToken cancellationToken)

@@ -1,4 +1,4 @@
-﻿using Lwu.CourseManagement.Application.Entities;
+﻿using Lwu.CourseManagement.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -25,9 +25,6 @@ namespace Lwu.CourseManagement.Infrastructure.EntityConfigurations
                 .HasMaxLength(255)
                 .IsRequired();
 
-            entityTypeBuilder
-                .HasIndex(u => u.Username).IsUnique();
-
             entityTypeBuilder.Property(t => t.Email)
                 .HasMaxLength(255)
                 .IsRequired();
@@ -40,17 +37,9 @@ namespace Lwu.CourseManagement.Infrastructure.EntityConfigurations
                 .HasMaxLength(255)
                 .IsRequired();
 
-            entityTypeBuilder
-                .HasOne(u => u.Student).WithOne(s => s.User).HasForeignKey<AppUser>(u => u.StudentId);
-
-            entityTypeBuilder
-                .HasOne(u => u.Staff).WithOne(s => s.User).HasForeignKey<AppUser>(u => u.StaffId);
-
-
-            //entityTypeBuilder.HasOne(x => x.CreatedByUser).WithMany().OnDelete(DeleteBehavior.Restrict).HasForeignKey(x => x.CreatedByUserId).OnDelete(DeleteBehavior.Restrict);
-            //entityTypeBuilder.HasOne(x => x.ModifiedByUser).WithMany().OnDelete(DeleteBehavior.Restrict).HasForeignKey(x => x.ModifiedByUserId).OnDelete(DeleteBehavior.Restrict).IsRequired(false);
-            //entityTypeBuilder.HasOne(x => x.DeletedByUser).WithMany().OnDelete(DeleteBehavior.Restrict).HasForeignKey(x => x.DeletedByUserId).OnDelete(DeleteBehavior.Restrict).IsRequired(false);
-
+            // Indexes
+            entityTypeBuilder.HasIndex(u => u.Email).IsUnique();
+            entityTypeBuilder.HasIndex(u => u.Username).IsUnique();
         }
     }
 }

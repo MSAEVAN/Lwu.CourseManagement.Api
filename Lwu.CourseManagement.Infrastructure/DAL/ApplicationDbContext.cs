@@ -1,7 +1,7 @@
 ﻿using Lwu.CourseManagement.Application.Common.Interfaces;
-using Lwu.CourseManagement.Application.Entities;
+using Lwu.CourseManagement.Domain.Entities;
+using Lwu.CourseManagement.Infrastructure.EntityConfigurations;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -31,12 +31,20 @@ namespace Lwu.CourseManagement.Infrastructure.DAL
         public DbSet<Student> Students => Set<Student>();
         public DbSet<Staff> Staffs => Set<Staff>();
 
+        public DbSet<Course> Courses => Set<Course>();
+        public DbSet<Class> Classes => Set<Class>();
+        public DbSet<CourseClass> CourseClasses => Set<CourseClass>();
+        public DbSet<Enrollment> Enrollments => Set<Enrollment>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfiguration(new AppUserConfiguration());
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+
+
+            //modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
             // Application default seed data
             modelBuilder.Entity<AppUser>().HasData(

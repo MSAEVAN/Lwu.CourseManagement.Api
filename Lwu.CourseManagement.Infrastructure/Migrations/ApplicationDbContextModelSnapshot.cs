@@ -22,7 +22,7 @@ namespace Lwu.CourseManagement.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Lwu.CourseManagement.Application.Entities.AppUser", b =>
+            modelBuilder.Entity("Lwu.CourseManagement.Domain.Entities.AppUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -68,12 +68,6 @@ namespace Lwu.CourseManagement.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<Guid?>("StaffId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("StudentId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("UserPrincipal")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -90,13 +84,10 @@ namespace Lwu.CourseManagement.Infrastructure.Migrations
 
                     b.HasIndex("DeletedByUserId");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.HasIndex("ModifiedByUserId");
-
-                    b.HasIndex("StaffId")
-                        .IsUnique();
-
-                    b.HasIndex("StudentId")
-                        .IsUnique();
 
                     b.HasIndex("Username")
                         .IsUnique();
@@ -119,7 +110,207 @@ namespace Lwu.CourseManagement.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Lwu.CourseManagement.Application.Entities.Staff", b =>
+            modelBuilder.Entity("Lwu.CourseManagement.Domain.Entities.Class", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid?>("DeletedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid?>("ModifiedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<string>("Room")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("DeletedByUserId");
+
+                    b.HasIndex("ModifiedByUserId");
+
+                    b.ToTable("Classes");
+                });
+
+            modelBuilder.Entity("Lwu.CourseManagement.Domain.Entities.Course", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid?>("DeletedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid?>("ModifiedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("DeletedByUserId");
+
+                    b.HasIndex("ModifiedByUserId");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("Lwu.CourseManagement.Domain.Entities.CourseClass", b =>
+                {
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ClassId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid?>("DeletedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid?>("ModifiedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("CourseId", "ClassId");
+
+                    b.HasIndex("ClassId");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("DeletedByUserId");
+
+                    b.HasIndex("ModifiedByUserId");
+
+                    b.ToTable("CourseClasses");
+                });
+
+            modelBuilder.Entity("Lwu.CourseManagement.Domain.Entities.Enrollment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("AssignedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("NOW()");
+
+                    b.Property<Guid>("AssignedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ClassId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid?>("DeletedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid?>("ModifiedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssignedByUserId");
+
+                    b.HasIndex("ClassId");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("DeletedByUserId");
+
+                    b.HasIndex("ModifiedByUserId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Enrollments");
+                });
+
+            modelBuilder.Entity("Lwu.CourseManagement.Domain.Entities.Staff", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -139,7 +330,8 @@ namespace Lwu.CourseManagement.Infrastructure.Migrations
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -160,11 +352,14 @@ namespace Lwu.CourseManagement.Infrastructure.Migrations
                     b.HasIndex("DeletedByUserId");
 
                     b.HasIndex("ModifiedByUserId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Staffs");
                 });
 
-            modelBuilder.Entity("Lwu.CourseManagement.Application.Entities.Student", b =>
+            modelBuilder.Entity("Lwu.CourseManagement.Domain.Entities.Student", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -184,7 +379,13 @@ namespace Lwu.CourseManagement.Infrastructure.Migrations
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("ID")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -206,100 +407,257 @@ namespace Lwu.CourseManagement.Infrastructure.Migrations
 
                     b.HasIndex("ModifiedByUserId");
 
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("Lwu.CourseManagement.Application.Entities.AppUser", b =>
+            modelBuilder.Entity("Lwu.CourseManagement.Domain.Entities.AppUser", b =>
                 {
-                    b.HasOne("Lwu.CourseManagement.Application.Entities.AppUser", "CreatedByUser")
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.AppUser", "CreatedByUser")
                         .WithMany()
                         .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Lwu.CourseManagement.Application.Entities.AppUser", "DeletedByUser")
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.AppUser", "DeletedByUser")
                         .WithMany()
-                        .HasForeignKey("DeletedByUserId");
+                        .HasForeignKey("DeletedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Lwu.CourseManagement.Application.Entities.AppUser", "ModifiedByUser")
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.AppUser", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
-
-                    b.HasOne("Lwu.CourseManagement.Application.Entities.Staff", "Staff")
-                        .WithOne("User")
-                        .HasForeignKey("Lwu.CourseManagement.Application.Entities.AppUser", "StaffId");
-
-                    b.HasOne("Lwu.CourseManagement.Application.Entities.Student", "Student")
-                        .WithOne("User")
-                        .HasForeignKey("Lwu.CourseManagement.Application.Entities.AppUser", "StudentId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("CreatedByUser");
 
                     b.Navigation("DeletedByUser");
 
                     b.Navigation("ModifiedByUser");
+                });
 
-                    b.Navigation("Staff");
+            modelBuilder.Entity("Lwu.CourseManagement.Domain.Entities.Class", b =>
+                {
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.AppUser", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.AppUser", "DeletedByUser")
+                        .WithMany()
+                        .HasForeignKey("DeletedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.AppUser", "ModifiedByUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("DeletedByUser");
+
+                    b.Navigation("ModifiedByUser");
+                });
+
+            modelBuilder.Entity("Lwu.CourseManagement.Domain.Entities.Course", b =>
+                {
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.AppUser", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.AppUser", "DeletedByUser")
+                        .WithMany()
+                        .HasForeignKey("DeletedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.AppUser", "ModifiedByUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("DeletedByUser");
+
+                    b.Navigation("ModifiedByUser");
+                });
+
+            modelBuilder.Entity("Lwu.CourseManagement.Domain.Entities.CourseClass", b =>
+                {
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.Class", "Class")
+                        .WithMany("CourseClasses")
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.Course", "Course")
+                        .WithMany("CourseClasses")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.AppUser", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.AppUser", "DeletedByUser")
+                        .WithMany()
+                        .HasForeignKey("DeletedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.AppUser", "ModifiedByUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Class");
+
+                    b.Navigation("Course");
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("DeletedByUser");
+
+                    b.Navigation("ModifiedByUser");
+                });
+
+            modelBuilder.Entity("Lwu.CourseManagement.Domain.Entities.Enrollment", b =>
+                {
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.AppUser", "AssignedBy")
+                        .WithMany()
+                        .HasForeignKey("AssignedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.Class", "Class")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.AppUser", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.AppUser", "DeletedByUser")
+                        .WithMany()
+                        .HasForeignKey("DeletedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.AppUser", "ModifiedByUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.Student", "Student")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AssignedBy");
+
+                    b.Navigation("Class");
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("DeletedByUser");
+
+                    b.Navigation("ModifiedByUser");
 
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("Lwu.CourseManagement.Application.Entities.Staff", b =>
+            modelBuilder.Entity("Lwu.CourseManagement.Domain.Entities.Staff", b =>
                 {
-                    b.HasOne("Lwu.CourseManagement.Application.Entities.AppUser", "CreatedByUser")
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.AppUser", "CreatedByUser")
                         .WithMany()
                         .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Lwu.CourseManagement.Application.Entities.AppUser", "DeletedByUser")
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.AppUser", "DeletedByUser")
                         .WithMany()
-                        .HasForeignKey("DeletedByUserId");
+                        .HasForeignKey("DeletedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Lwu.CourseManagement.Application.Entities.AppUser", "ModifiedByUser")
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.AppUser", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.AppUser", "User")
+                        .WithOne()
+                        .HasForeignKey("Lwu.CourseManagement.Domain.Entities.Staff", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("CreatedByUser");
 
                     b.Navigation("DeletedByUser");
 
                     b.Navigation("ModifiedByUser");
+
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Lwu.CourseManagement.Application.Entities.Student", b =>
+            modelBuilder.Entity("Lwu.CourseManagement.Domain.Entities.Student", b =>
                 {
-                    b.HasOne("Lwu.CourseManagement.Application.Entities.AppUser", "CreatedByUser")
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.AppUser", "CreatedByUser")
                         .WithMany()
                         .HasForeignKey("CreatedByUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Lwu.CourseManagement.Application.Entities.AppUser", "DeletedByUser")
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.AppUser", "DeletedByUser")
                         .WithMany()
-                        .HasForeignKey("DeletedByUserId");
+                        .HasForeignKey("DeletedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Lwu.CourseManagement.Application.Entities.AppUser", "ModifiedByUser")
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.AppUser", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedByUserId");
+                        .HasForeignKey("ModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Lwu.CourseManagement.Domain.Entities.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("CreatedByUser");
 
                     b.Navigation("DeletedByUser");
 
                     b.Navigation("ModifiedByUser");
+
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Lwu.CourseManagement.Application.Entities.Staff", b =>
+            modelBuilder.Entity("Lwu.CourseManagement.Domain.Entities.Class", b =>
                 {
-                    b.Navigation("User")
-                        .IsRequired();
+                    b.Navigation("CourseClasses");
+
+                    b.Navigation("Enrollments");
                 });
 
-            modelBuilder.Entity("Lwu.CourseManagement.Application.Entities.Student", b =>
+            modelBuilder.Entity("Lwu.CourseManagement.Domain.Entities.Course", b =>
                 {
-                    b.Navigation("User")
-                        .IsRequired();
+                    b.Navigation("CourseClasses");
+                });
+
+            modelBuilder.Entity("Lwu.CourseManagement.Domain.Entities.Student", b =>
+                {
+                    b.Navigation("Enrollments");
                 });
 #pragma warning restore 612, 618
         }

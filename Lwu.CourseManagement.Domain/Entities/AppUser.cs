@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lwu.CourseManagement.Application.Entities
+namespace Lwu.CourseManagement.Domain.Entities
 {
     public class AppUser : BaseEntity
     {
@@ -17,11 +17,5 @@ namespace Lwu.CourseManagement.Application.Entities
         public string UserPrincipal { get; set; } = default!;
         public string PasswordHash { get; set; } = default!;
         public string Role { get; set; } = "Staff"; // "Staff" | "Student"
-
-        public Guid? StudentId { get; set; }
-        public Student? Student { get; set; }
-
-        public Guid? StaffId { get; set; }
-        public Staff? Staff { get; set; }
     }
 }
